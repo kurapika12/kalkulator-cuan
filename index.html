@@ -1,0 +1,698 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kalkulator Cuan - Campus Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+        background-color: #f8fafc;
+      }
+      .glass-card {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+      .custom-shadow {
+        box-shadow:
+          0 10px 25px -5px rgba(0, 0, 0, 0.05),
+          0 8px 10px -6px rgba(0, 0, 0, 0.05);
+      }
+      .animate-in {
+        animation: fadeIn 0.2s ease-out;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(5px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body class="pb-24">
+    <!-- Header -->
+    <header
+      class="sticky top-0 z-40 w-full glass-card border-b border-gray-100 px-6 py-4 flex justify-between items-center"
+    >
+      <div onclick="showHistoryView()" class="cursor-pointer">
+        <h1 class="text-xl font-bold text-indigo-600">Kalkulator Cuan</h1>
+        <p
+          class="text-[10px] text-gray-500 font-semibold uppercase tracking-wider"
+        >
+          Edisi Mahasiswa Kampus
+        </p>
+      </div>
+      <button
+        onclick="showHistoryView()"
+        class="p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6 text-gray-600"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+          />
+        </svg>
+      </button>
+    </header>
+
+    <main class="max-w-md mx-auto px-4 mt-6" id="main-content">
+      <!-- View: History List (Halaman Awal) -->
+      <div id="history-view" class="animate-in">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-lg font-bold text-gray-800">Riwayat Jualan</h2>
+          <button
+            onclick="startNewCalculation()"
+            class="text-sm font-bold text-white bg-indigo-600 px-4 py-2 rounded-xl shadow-lg shadow-indigo-200 hover:bg-indigo-700 active:scale-95 transition-all"
+          >
+            + Baru
+          </button>
+        </div>
+
+        <div id="history-list" class="space-y-4">
+          <!-- Items injected by JS -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="text-center py-20 hidden">
+          <div
+            class="bg-indigo-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-10 w-10 text-indigo-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+              />
+            </svg>
+          </div>
+          <h3 class="text-gray-800 font-bold text-lg">Belum Ada Catatan</h3>
+          <p class="text-gray-500 text-sm mt-2 px-10">
+            Klik tombol <b>+ Baru</b> di atas untuk mulai merancang jualanmu!
+          </p>
+        </div>
+      </div>
+
+      <!-- View: Calculator Form (Hidden by Default) -->
+      <div id="calc-view" class="hidden animate-in">
+        <!-- Basic Info -->
+        <div class="bg-white rounded-3xl p-6 custom-shadow mb-4">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-bold text-gray-800" id="form-title">
+              Rencana Jualan
+            </h2>
+            <button onclick="showHistoryView()" class="text-gray-400">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="space-y-4">
+            <div>
+              <label
+                class="block text-xs font-bold text-gray-400 uppercase mb-1 tracking-wider"
+                >Nama Produkta yang mau dijual</label
+              >
+              <input
+                type="text"
+                id="p-name"
+                placeholder="Isimi di sini namanya"
+                class="w-full px-4 py-3 rounded-xl bg-gray-50 border-transparent focus:bg-white focus:ring-2 focus:ring-indigo-100 transition-all outline-none text-gray-800 font-semibold"
+              />
+            </div>
+            <div>
+              <label
+                class="block text-xs font-bold text-gray-400 uppercase mb-1 tracking-wider"
+                >Ko Yakinkah Jual Sebanyak Ini?</label
+              >
+              <input
+                type="number"
+                id="p-qty"
+                placeholder="Misal: 20"
+                class="w-full px-4 py-3 rounded-xl bg-gray-50 border-transparent focus:bg-white focus:ring-2 focus:ring-indigo-100 transition-all outline-none text-gray-800 font-semibold"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Detail Section -->
+        <div class="bg-white rounded-3xl p-6 custom-shadow mb-4">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-bold text-gray-800">Rincian Modal</h2>
+            <span
+              class="text-[10px] font-bold text-indigo-500 bg-indigo-50 px-2 py-1 rounded-md uppercase"
+              >Auto-Calculate</span
+            >
+          </div>
+
+          <div id="modal-items-container" class="space-y-3 mb-4">
+            <!-- Dynamic Items Inject Here -->
+          </div>
+
+          <button
+            onclick="addModalItem()"
+            class="w-full py-3 border-2 border-dashed border-gray-200 rounded-xl text-gray-400 text-sm font-bold hover:border-indigo-300 hover:text-indigo-500 transition-all"
+          >
+            + Tambah Bahan Baru
+          </button>
+
+          <div
+            class="mt-6 pt-4 border-t border-gray-50 flex justify-between items-center"
+          >
+            <span class="text-sm font-bold text-gray-500"
+              >Total Modal Keseluruhan</span
+            >
+            <span
+              class="text-xl font-black text-gray-900"
+              id="total-modal-display"
+              >Rp 0</span
+            >
+          </div>
+        </div>
+
+        <!-- Margin Selection -->
+        <div class="bg-white rounded-3xl p-6 custom-shadow mb-4">
+          <div class="flex justify-between items-center mb-2">
+            <h2 class="text-lg font-bold text-gray-800">Margin Untung</h2>
+            <span
+              id="margin-label"
+              class="text-[10px] font-bold text-green-600 bg-green-50 px-2 py-1 rounded-md uppercase"
+              >Ramah Kantong</span
+            >
+          </div>
+          <p class="text-xs text-gray-400 mb-4 italic">
+            Geser untuk mengatur target persentase keuntungan:
+          </p>
+          <div class="flex items-center space-x-4">
+            <input
+              type="range"
+              id="p-margin"
+              min="5"
+              max="100"
+              value="35"
+              class="flex-grow accent-indigo-600"
+            />
+            <span
+              class="text-xl font-black text-indigo-600 w-16 text-right"
+              id="margin-val"
+              >35%</span
+            >
+          </div>
+        </div>
+
+        <!-- Final Result Card -->
+        <div
+          class="bg-indigo-600 rounded-[2rem] p-7 text-white custom-shadow mb-6"
+        >
+          <h3
+            class="text-indigo-200 text-[10px] font-black mb-6 uppercase tracking-widest text-center border-b border-indigo-500/50 pb-2"
+          >
+            Ringkasan Hasil Perhitungan
+          </h3>
+          <div class="grid grid-cols-2 gap-y-8 gap-x-4">
+            <div class="text-center border-r border-indigo-500/30">
+              <p class="text-[10px] text-indigo-200 uppercase font-bold mb-1">
+                Modal / Pcs
+              </p>
+              <p class="text-lg font-bold" id="res-modal-pcs">Rp 0</p>
+            </div>
+            <div class="text-center">
+              <p class="text-[10px] text-indigo-200 uppercase font-bold mb-1">
+                Harga Jual / Pcs
+              </p>
+              <p class="text-lg font-black text-yellow-300" id="res-jual-pcs">
+                Rp 0
+              </p>
+            </div>
+            <div
+              class="col-span-2 pt-2 text-center bg-indigo-700/40 py-4 rounded-2xl"
+            >
+              <p class="text-[10px] text-indigo-200 uppercase font-bold mb-1">
+                Total Untung Bersih (Jika Habis)
+              </p>
+              <p
+                class="text-3xl font-black text-green-300"
+                id="res-total-untung"
+              >
+                Rp 0
+              </p>
+            </div>
+            <div class="col-span-2 text-center opacity-70">
+              <p class="text-[9px] text-indigo-200 uppercase font-bold mb-1">
+                Total Omset Penjualan
+              </p>
+              <p class="text-sm font-bold" id="res-revenue">Rp 0</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <button
+            onclick="saveCalculation()"
+            class="w-full py-4 bg-gray-900 text-white font-bold rounded-2xl hover:bg-black transition-all transform active:scale-95 shadow-xl"
+          >
+            Simpan Perhitungan Ini
+          </button>
+          <button
+            onclick="showHistoryView()"
+            class="w-full py-3 text-gray-500 font-bold text-sm"
+          >
+            Kembali Ke Riwayat
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Toast Notification -->
+    <div
+      id="toast"
+      class="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-gray-900/90 backdrop-blur text-white px-8 py-3 rounded-full text-xs font-bold opacity-0 pointer-events-none transition-all duration-300 z-50 shadow-2xl"
+    >
+      Pesan
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div
+      id="delete-modal"
+      class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center opacity-0 pointer-events-none transition-all z-50"
+    >
+      <div
+        class="bg-white rounded-3xl p-6 w-80 transform scale-90 transition-all"
+      >
+        <h3 class="font-bold text-lg text-gray-800 mb-2">Hapus Catatan?</h3>
+        <p class="text-sm text-gray-500 mb-6">
+          Data ini akan dihapus permanen.
+        </p>
+        <div class="flex gap-3">
+          <button
+            onclick="closeDeleteModal()"
+            class="flex-1 py-2 rounded-xl bg-gray-100 font-bold"
+          >
+            Batal
+          </button>
+          <button
+            id="confirm-delete"
+            class="flex-1 py-2 rounded-xl bg-red-500 text-white font-bold"
+          >
+            Hapus
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Success Popup -->
+    <div
+      id="success-modal"
+      class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center opacity-0 pointer-events-none transition-all z-50"
+    >
+      <div
+        class="bg-white rounded-3xl p-6 w-80 text-center transform scale-90 transition-all"
+      >
+        <div class="text-4xl mb-3">🎉</div>
+        <h3 class="font-bold text-lg text-gray-800">
+          Semoga Lancar na Jualanta!
+        </h3>
+        <p class="text-sm text-gray-500 mt-2">
+          Semoga laku habis & dan banyak uangta 💸
+        </p>
+      </div>
+    </div>
+
+    <script>
+      // State
+      let history = JSON.parse(localStorage.getItem("cuan_history_v2")) || [];
+      let currentEditId = null;
+      let modalItems = [{ id: Date.now(), name: "", price: 0 }];
+
+      // Elements
+      const historyView = document.getElementById("history-view");
+      const calcView = document.getElementById("calc-view");
+      const historyList = document.getElementById("history-list");
+      const emptyState = document.getElementById("empty-state");
+      const modalContainer = document.getElementById("modal-items-container");
+      const formTitle = document.getElementById("form-title");
+
+      const inName = document.getElementById("p-name");
+      const inQty = document.getElementById("p-qty");
+      const inMargin = document.getElementById("p-margin");
+      const marginVal = document.getElementById("margin-val");
+      const marginLabel = document.getElementById("margin-label");
+      const totalModalDisplay = document.getElementById("total-modal-display");
+
+      // Results
+      const resModalPcs = document.getElementById("res-modal-pcs");
+      const resJualPcs = document.getElementById("res-jual-pcs");
+      const resTotalUntung = document.getElementById("res-total-untung");
+      const resRevenue = document.getElementById("res-revenue");
+
+      // Navigasi Awal: Selalu ke History
+      window.onload = () => {
+        showHistoryView();
+      };
+
+      // Navigation Logic
+      function showHistoryView() {
+        calcView.classList.add("hidden");
+        historyView.classList.remove("hidden");
+        renderHistory();
+      }
+
+      function startNewCalculation() {
+        resetForm();
+        historyView.classList.add("hidden");
+        calcView.classList.remove("hidden");
+      }
+
+      function showCalculatorForEdit() {
+        historyView.classList.add("hidden");
+        calcView.classList.remove("hidden");
+      }
+
+      // Modal Management
+      function addModalItem() {
+        modalItems.push({ id: Date.now(), name: "", price: 0 });
+        renderModalItems();
+      }
+
+      function removeModalItem(id) {
+        if (modalItems.length > 1) {
+          modalItems = modalItems.filter((item) => item.id !== id);
+          renderModalItems();
+          calculate();
+        }
+      }
+
+      function updateItem(id, field, value) {
+        const index = modalItems.findIndex((i) => i.id === id);
+        if (field === "price") {
+          modalItems[index].price = parseFloat(value) || 0;
+        } else {
+          modalItems[index].name = value;
+        }
+        calculate();
+      }
+
+      function renderModalItems() {
+        modalContainer.innerHTML = "";
+        modalItems.forEach((item, index) => {
+          const row = document.createElement("div");
+          row.className = "flex items-center space-x-2 animate-in";
+          row.innerHTML = `
+                    <input type="text" placeholder="Bahan ${index + 1}" value="${item.name}" 
+                        oninput="updateItem(${item.id}, 'name', this.value)"
+                        class="flex-[2] px-3 py-2 rounded-lg bg-gray-50 border-none focus:ring-2 focus:ring-indigo-100 text-sm outline-none font-medium">
+                    <div class="flex-[1.5] relative">
+                        <span class="absolute left-2 top-2 text-[10px] text-gray-400 font-bold">Rp</span>
+                        <input type="number" placeholder="Harga" value="${item.price || ""}" 
+                            oninput="updateItem(${item.id}, 'price', this.value)"
+                            class="w-full pl-7 pr-2 py-2 rounded-lg bg-gray-50 border-none focus:ring-2 focus:ring-indigo-100 text-sm outline-none font-bold">
+                    </div>
+                    ${
+                      modalItems.length > 1
+                        ? `
+                    <button onclick="removeModalItem(${item.id})" class="p-2 text-gray-300 hover:text-red-400 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                    `
+                        : ""
+                    }
+                `;
+          modalContainer.appendChild(row);
+        });
+      }
+
+      // Calculation Logic
+      function formatIDR(amount) {
+        return new Intl.NumberFormat("id-ID", {
+          style: "currency",
+          currency: "IDR",
+          maximumFractionDigits: 0,
+        }).format(amount);
+      }
+
+      inQty.oninput = calculate;
+      inMargin.oninput = () => {
+        marginVal.innerText = inMargin.value + "%";
+        updateMarginLabel(inMargin.value);
+        calculate();
+      };
+
+      function updateMarginLabel(val) {
+        if (val <= 25) {
+          marginLabel.innerText = "Aiih Terlalu Murah Juga";
+          marginLabel.className =
+            "text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-md uppercase";
+        } else if (val <= 45) {
+          marginLabel.innerText = "Cocomi Harganya Begini";
+          marginLabel.className =
+            "text-[10px] font-bold text-green-600 bg-green-50 px-2 py-1 rounded-md uppercase";
+        } else if (val <= 70) {
+          marginLabel.innerText = "Untuk Orang Tuanya CEO";
+          marginLabel.className =
+            "text-[10px] font-bold text-orange-600 bg-orange-50 px-2 py-1 rounded-md uppercase";
+        } else {
+          marginLabel.innerText = "Ini Bapaknya Elon Musk Baru Da Beli";
+          marginLabel.className =
+            "text-[10px] font-bold text-red-600 bg-red-50 px-2 py-1 rounded-md uppercase";
+        }
+      }
+
+      function calculate() {
+        const totalModal = modalItems.reduce(
+          (acc, curr) => acc + curr.price,
+          0,
+        );
+        const qty = parseFloat(inQty.value) || 0;
+        const margin = parseFloat(inMargin.value) || 0;
+
+        totalModalDisplay.innerText = formatIDR(totalModal);
+
+        const modalPerPcs = qty > 0 ? totalModal / qty : 0;
+        const untungPerPcs = modalPerPcs * (margin / 100);
+        // Pembulatan ke 500 terdekat
+        const hargaJualPerPcs =
+          Math.ceil((modalPerPcs + untungPerPcs) / 500) * 500;
+        const totalUntung = (hargaJualPerPcs - modalPerPcs) * qty;
+        const totalRevenue = hargaJualPerPcs * qty;
+
+        resModalPcs.innerText = formatIDR(modalPerPcs);
+        resJualPcs.innerText = formatIDR(hargaJualPerPcs);
+        resTotalUntung.innerText = formatIDR(totalUntung);
+        resRevenue.innerText = formatIDR(totalRevenue);
+
+        return {
+          totalModal,
+          qty,
+          margin,
+          modalPerPcs,
+          hargaJualPerPcs,
+          totalUntung,
+          totalRevenue,
+        };
+      }
+
+      // Persistence Logic
+      function saveCalculation() {
+        if (!inName.value) return showToast("Beri nama produknya dulu yuk!");
+        if (parseFloat(inQty.value) <= 0 || !inQty.value)
+          return showToast("Mau jualan berapa pcs?");
+
+        const results = calculate();
+        if (results.totalModal <= 0)
+          return showToast("Isi harga bahan-bahannya dulu!");
+
+        const data = {
+          id: currentEditId || Date.now(),
+          name: inName.value,
+          items: [...modalItems],
+          ...results,
+          date: new Date().toLocaleDateString("id-ID", {
+            day: "numeric",
+            month: "short",
+          }),
+        };
+
+        if (currentEditId) {
+          const idx = history.findIndex((h) => h.id === currentEditId);
+          history[idx] = data;
+          showToast("Berhasil diperbarui!");
+        } else {
+          history.unshift(data);
+          showToast("Siap jualan! Tersimpan.");
+        }
+
+        localStorage.setItem("cuan_history_v2", JSON.stringify(history));
+        showSuccessModal();
+        setTimeout(() => {
+          closeSuccessModal();
+          showHistoryView();
+        }, 3000);
+      }
+
+      function renderHistory() {
+        historyList.innerHTML = "";
+        if (history.length === 0) {
+          emptyState.classList.remove("hidden");
+          return;
+        }
+        emptyState.classList.add("hidden");
+        history.forEach((item) => {
+          const el = document.createElement("div");
+          el.className =
+            "bg-white rounded-2xl p-5 custom-shadow animate-in border border-transparent hover:border-indigo-100 active:scale-[0.98] transition-all cursor-pointer";
+          el.onclick = () => editItem(item.id);
+          el.innerHTML = `
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <span class="text-[10px] font-black text-indigo-400 uppercase tracking-widest">${item.date}</span>
+                            <h3 class="font-bold text-gray-800 text-lg">${item.name}</h3>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[9px] text-gray-400 uppercase font-bold tracking-wider">Harga Jual</p>
+                            <p class="font-black text-indigo-600 text-lg">${formatIDR(item.hargaJualPerPcs)}</p>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center pt-3 border-t border-gray-50">
+                        <div class="flex flex-col">
+                            <span class="text-[10px] text-gray-400 font-bold uppercase">Target</span>
+                            <span class="text-xs text-gray-700 font-bold">${item.qty} Pcs</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="text-right">
+                                <p class="text-[10px] text-gray-400 font-bold uppercase">Untung Bersih</p>
+                                <p class="text-sm font-black text-green-500">+${formatIDR(item.totalUntung)}</p>
+                            </div>
+                            <button onclick="event.stopPropagation(); deleteItem(${item.id})" class="p-2 text-gray-300 hover:text-red-400 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                `;
+          historyList.appendChild(el);
+        });
+      }
+
+      function editItem(id) {
+        const item = history.find((h) => h.id === id);
+        if (!item) return;
+
+        currentEditId = id;
+        inName.value = item.name;
+        inQty.value = item.qty;
+        inMargin.value = item.margin;
+        modalItems = JSON.parse(JSON.stringify(item.items));
+
+        formTitle.innerText = "Edit Perhitungan";
+        marginVal.innerText = item.margin + "%";
+        updateMarginLabel(item.margin);
+        renderModalItems();
+        calculate();
+        showCalculatorForEdit();
+      }
+
+      let deleteTargetId = null;
+
+      function deleteItem(id) {
+        deleteTargetId = id;
+        const modal = document.getElementById("delete-modal");
+        modal.classList.remove("opacity-0", "pointer-events-none");
+        modal.querySelector("div").classList.remove("scale-90");
+      }
+
+      function closeDeleteModal() {
+        const modal = document.getElementById("delete-modal");
+        modal.classList.add("opacity-0", "pointer-events-none");
+        modal.querySelector("div").classList.add("scale-90");
+        deleteTargetId = null;
+      }
+
+      document.getElementById("confirm-delete").onclick = () => {
+        history = history.filter((h) => h.id !== deleteTargetId);
+        localStorage.setItem("cuan_history_v2", JSON.stringify(history));
+        renderHistory();
+        closeDeleteModal();
+        showToast("Catatan berhasil dihapus");
+      };
+
+      function resetForm() {
+        currentEditId = null;
+        inName.value = "";
+        inQty.value = "";
+        inMargin.value = 35;
+        marginVal.innerText = "35%";
+        modalItems = [{ id: Date.now(), name: "", price: 0 }];
+        formTitle.innerText = "Rencana Jualan";
+        updateMarginLabel(35);
+        renderModalItems();
+        calculate();
+      }
+
+      function showToast(msg) {
+        const toast = document.getElementById("toast");
+        toast.innerText = msg;
+        toast.classList.add("opacity-100");
+        toast.style.bottom = "40px";
+        setTimeout(() => {
+          toast.classList.remove("opacity-100");
+          toast.style.bottom = "30px";
+        }, 2500);
+      }
+
+      function showSuccessModal() {
+        const modal = document.getElementById("success-modal");
+        modal.classList.remove("opacity-0", "pointer-events-none");
+        modal.querySelector("div").classList.remove("scale-90");
+      }
+
+      function closeSuccessModal() {
+        const modal = document.getElementById("success-modal");
+        modal.classList.add("opacity-0", "pointer-events-none");
+        modal.querySelector("div").classList.add("scale-90");
+      }
+    </script>
+  </body>
+</html>
