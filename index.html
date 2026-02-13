@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Buatan Alam Untuk Sopi</title>
+    <title>Buatan Alam Untuk Pacarnya Sopi</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="assets/logo_app.png" type="image/png">
     <link
@@ -51,7 +51,9 @@
       class="sticky top-0 z-40 w-full glass-card border-b border-gray-100 px-6 py-4 flex justify-between items-center"
     >
       <div onclick="showHistoryView()" class="cursor-pointer">
-        <h1 class="text-xl font-bold text-indigo-600">Hitung Duit jualan biar financial freedom</h1>
+        <h1 class="text-xl font-bold text-indigo-600">
+          Bissmillah Financial Freedom
+        </h1>
         <p
           class="text-[10px] text-gray-500 font-semibold uppercase tracking-wider"
         >
@@ -80,7 +82,7 @@
     </header>
 
     <main class="max-w-md mx-auto px-4 mt-6" id="main-content">
-      <!-- View: History List (Halaman Awal) -->
+      <!-- View: History List -->
       <div id="history-view" class="animate-in">
         <div class="flex justify-between items-center mb-6">
           <h2 class="text-lg font-bold text-gray-800">Riwayat Jualan</h2>
@@ -118,20 +120,25 @@
           </div>
           <h3 class="text-gray-800 font-bold text-lg">Belum Ada Catatan</h3>
           <p class="text-gray-500 text-sm mt-2 px-10">
-            Klik tombol <b>+ Baru</b> di atas untuk mulai merancang jualanmu!
+            Klik tombol <b>+ Baru</b> untuk mulai merancang jualanmu!
           </p>
         </div>
       </div>
 
-      <!-- View: Calculator Form (Hidden by Default) -->
+      <!-- View: Calculator Form -->
       <div id="calc-view" class="hidden animate-in">
-        <!-- Basic Info -->
-        <div class="bg-white rounded-3xl p-6 custom-shadow mb-4">
+        <!-- Basic Info & Image Upload -->
+        <div
+          class="bg-white rounded-3xl p-6 custom-shadow mb-4 border border-gray-50"
+        >
           <div class="flex justify-between items-center mb-4">
             <h2 class="text-lg font-bold text-gray-800" id="form-title">
               Rencana Jualan
             </h2>
-            <button onclick="showHistoryView()" class="text-gray-400">
+            <button
+              onclick="showHistoryView()"
+              class="text-gray-300 hover:text-gray-500"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-6 w-6"
@@ -149,56 +156,110 @@
             </button>
           </div>
           <div class="space-y-4">
-            <div>
-              <label
-                class="block text-xs font-bold text-gray-400 uppercase mb-1 tracking-wider"
-                >Nama Produkta yang mau dijual</label
-              >
+            <div class="flex flex-col items-center mb-2">
+              <label for="p-image" class="cursor-pointer group relative">
+                <div
+                  id="image-preview-container"
+                  class="w-24 h-24 bg-gray-100 rounded-2xl border-2 border-dashed border-gray-200 flex items-center justify-center overflow-hidden group-hover:border-indigo-300 transition-all"
+                >
+                  <img
+                    id="image-preview"
+                    src=""
+                    class="hidden w-full h-full object-cover"
+                  />
+                  <div id="image-placeholder" class="text-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-8 w-8 text-gray-300 mx-auto"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      />
+                    </svg>
+                    <p
+                      class="text-[9px] text-gray-400 font-bold uppercase mt-1"
+                    >
+                      Foto (Opsional)
+                    </p>
+                  </div>
+                </div>
+              </label>
               <input
-                type="text"
-                id="p-name"
-                placeholder="Isimi di sini namanya"
-                class="w-full px-4 py-3 rounded-xl bg-gray-50 border-transparent focus:bg-white focus:ring-2 focus:ring-indigo-100 transition-all outline-none text-gray-800 font-semibold"
+                type="file"
+                id="p-image"
+                accept="image/*"
+                class="hidden"
+                onchange="handleImageUpload(this)"
               />
+              <button
+                id="btn-remove-image"
+                onclick="removeImage()"
+                class="hidden mt-2 text-[10px] font-bold text-red-400 uppercase tracking-wider"
+              >
+                Hapus Foto
+              </button>
             </div>
-            <div>
-              <label
-                class="block text-xs font-bold text-gray-400 uppercase mb-1 tracking-wider"
-                >Ko Yakinkah Jual Sebanyak Ini?</label
-              >
-              <input
-                type="number"
-                id="p-qty"
-                placeholder="Misal: 20"
-                class="w-full px-4 py-3 rounded-xl bg-gray-50 border-transparent focus:bg-white focus:ring-2 focus:ring-indigo-100 transition-all outline-none text-gray-800 font-semibold"
-              />
+
+            <div class="space-y-4">
+              <div>
+                <label
+                  class="block text-xs font-bold text-gray-400 uppercase mb-1 tracking-wider"
+                  >Nama Produkta yang mau dijual</label
+                >
+                <input
+                  type="text"
+                  id="p-name"
+                  placeholder="Isimi di sini namanya"
+                  class="w-full px-4 py-3 rounded-xl bg-gray-50 border-transparent focus:bg-white focus:ring-2 focus:ring-indigo-100 transition-all outline-none text-gray-800 font-semibold"
+                />
+              </div>
+              <div>
+                <label
+                  class="block text-xs font-bold text-gray-400 uppercase mb-1 tracking-wider"
+                  >Ko Yakinkah Jual Sebanyak Ini?</label
+                >
+                <input
+                  type="number"
+                  id="p-qty"
+                  placeholder="Misal: 20"
+                  class="w-full px-4 py-3 rounded-xl bg-gray-50 border-transparent focus:bg-white focus:ring-2 focus:ring-indigo-100 transition-all outline-none text-gray-800 font-semibold"
+                />
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Modal Detail Section -->
-        <div class="bg-white rounded-3xl p-6 custom-shadow mb-4">
+        <!-- Modal Detail Section - UPDATED UI FOR BETTER ACCESSIBILITY -->
+        <div
+          class="bg-white rounded-3xl p-6 custom-shadow mb-4 border border-gray-50"
+        >
           <div class="flex justify-between items-center mb-4">
             <h2 class="text-lg font-bold text-gray-800">Rincian Modal</h2>
             <span
               class="text-[10px] font-bold text-indigo-500 bg-indigo-50 px-2 py-1 rounded-md uppercase"
-              >Auto-Calculate</span
+              >Input Bahan</span
             >
           </div>
 
-          <div id="modal-items-container" class="space-y-3 mb-4">
+          <div id="modal-items-container" class="space-y-4 mb-4">
             <!-- Dynamic Items Inject Here -->
           </div>
 
           <button
             onclick="addModalItem()"
-            class="w-full py-3 border-2 border-dashed border-gray-200 rounded-xl text-gray-400 text-sm font-bold hover:border-indigo-300 hover:text-indigo-500 transition-all"
+            class="w-full py-4 border-2 border-dashed border-gray-200 rounded-2xl text-gray-400 text-sm font-bold hover:border-indigo-300 hover:text-indigo-500 transition-all"
           >
             + Tambah Bahan Baru
           </button>
 
           <div
-            class="mt-6 pt-4 border-t border-gray-50 flex justify-between items-center"
+            class="mt-6 pt-4 border-t border-gray-100 flex justify-between items-center"
           >
             <span class="text-sm font-bold text-gray-500"
               >Total Modal Keseluruhan</span
@@ -212,18 +273,17 @@
         </div>
 
         <!-- Margin Selection -->
-        <div class="bg-white rounded-3xl p-6 custom-shadow mb-4">
+        <div
+          class="bg-white rounded-3xl p-6 custom-shadow mb-4 border border-gray-50"
+        >
           <div class="flex justify-between items-center mb-2">
             <h2 class="text-lg font-bold text-gray-800">Margin Untung</h2>
             <span
               id="margin-label"
-              class="text-[10px] font-bold text-green-600 bg-green-50 px-2 py-1 rounded-md uppercase"
+              class="text-[10px] font-bold text-green-600 bg-green-50 px-2 py-1 rounded-md uppercase tracking-wider"
               >Ramah Kantong</span
             >
           </div>
-          <p class="text-xs text-gray-400 mb-4 italic">
-            Geser untuk mengatur target persentase keuntungan:
-          </p>
           <div class="flex items-center space-x-4">
             <input
               type="range"
@@ -231,7 +291,7 @@
               min="5"
               max="100"
               value="35"
-              class="flex-grow accent-indigo-600"
+              class="flex-grow accent-indigo-600 cursor-pointer"
             />
             <span
               class="text-xl font-black text-indigo-600 w-16 text-right"
@@ -243,14 +303,17 @@
 
         <!-- Final Result Card -->
         <div
-          class="bg-indigo-600 rounded-[2rem] p-7 text-white custom-shadow mb-6"
+          class="bg-indigo-600 rounded-[2.5rem] p-8 text-white custom-shadow mb-6 relative overflow-hidden"
         >
+          <div
+            class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16"
+          ></div>
           <h3
             class="text-indigo-200 text-[10px] font-black mb-6 uppercase tracking-widest text-center border-b border-indigo-500/50 pb-2"
           >
             Ringkasan Hasil Perhitungan
           </h3>
-          <div class="grid grid-cols-2 gap-y-8 gap-x-4">
+          <div class="grid grid-cols-2 gap-y-6 gap-x-4">
             <div class="text-center border-r border-indigo-500/30">
               <p class="text-[10px] text-indigo-200 uppercase font-bold mb-1">
                 Modal / Pcs
@@ -266,10 +329,12 @@
               </p>
             </div>
             <div
-              class="col-span-2 pt-2 text-center bg-indigo-700/40 py-4 rounded-2xl"
+              class="col-span-2 pt-2 text-center bg-white/10 backdrop-blur-sm py-5 rounded-3xl border border-white/10"
             >
-              <p class="text-[10px] text-indigo-200 uppercase font-bold mb-1">
-                Total Untung Bersih (Jika Habis)
+              <p
+                class="text-[10px] text-indigo-100 uppercase font-bold mb-1 tracking-widest"
+              >
+                Total Untung Bersih
               </p>
               <p
                 class="text-3xl font-black text-green-300"
@@ -278,8 +343,8 @@
                 Rp 0
               </p>
             </div>
-            <div class="col-span-2 text-center opacity-70">
-              <p class="text-[9px] text-indigo-200 uppercase font-bold mb-1">
+            <div class="col-span-2 text-center opacity-70 mt-2">
+              <p class="text-[9px] text-indigo-200 uppercase font-bold">
                 Total Omset Penjualan
               </p>
               <p class="text-sm font-bold" id="res-revenue">Rp 0</p>
@@ -290,7 +355,7 @@
         <div class="space-y-3">
           <button
             onclick="saveCalculation()"
-            class="w-full py-4 bg-gray-900 text-white font-bold rounded-2xl hover:bg-black transition-all transform active:scale-95 shadow-xl"
+            class="w-full py-5 bg-gray-900 text-white font-bold rounded-2xl hover:bg-black transition-all transform active:scale-95 shadow-xl"
           >
             Simpan Perhitungan Ini
           </button>
@@ -311,7 +376,6 @@
     >
       Pesan
     </div>
-
     <!-- Delete Confirmation Modal -->
     <div
       id="delete-modal"
@@ -320,7 +384,7 @@
       <div
         class="bg-white rounded-3xl p-6 w-80 transform scale-90 transition-all"
       >
-        <h3 class="font-bold text-lg text-gray-800 mb-2">Hapus Catatan?</h3>
+        <h3 class="font-bold text-lg text-gray-800 mb-2">Ko mau hapus kah?</h3>
         <p class="text-sm text-gray-500 mb-6">
           Data ini akan dihapus permanen.
         </p>
@@ -358,12 +422,12 @@
         </p>
       </div>
     </div>
-
     <script>
       // State
-      let history = JSON.parse(localStorage.getItem("cuan_history_v2")) || [];
+      let history = JSON.parse(localStorage.getItem("cuan_history_v3")) || [];
       let currentEditId = null;
       let modalItems = [{ id: Date.now(), name: "", price: 0 }];
+      let currentBase64Image = "";
 
       // Elements
       const historyView = document.getElementById("history-view");
@@ -379,6 +443,9 @@
       const marginVal = document.getElementById("margin-val");
       const marginLabel = document.getElementById("margin-label");
       const totalModalDisplay = document.getElementById("total-modal-display");
+      const imgPreview = document.getElementById("image-preview");
+      const imgPlaceholder = document.getElementById("image-placeholder");
+      const btnRemoveImg = document.getElementById("btn-remove-image");
 
       // Results
       const resModalPcs = document.getElementById("res-modal-pcs");
@@ -386,12 +453,10 @@
       const resTotalUntung = document.getElementById("res-total-untung");
       const resRevenue = document.getElementById("res-revenue");
 
-      // Navigasi Awal: Selalu ke History
       window.onload = () => {
         showHistoryView();
       };
 
-      // Navigation Logic
       function showHistoryView() {
         calcView.classList.add("hidden");
         historyView.classList.remove("hidden");
@@ -404,12 +469,31 @@
         calcView.classList.remove("hidden");
       }
 
-      function showCalculatorForEdit() {
-        historyView.classList.add("hidden");
-        calcView.classList.remove("hidden");
+      // Image Handling
+      function handleImageUpload(input) {
+        const file = input.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            currentBase64Image = e.target.result;
+            imgPreview.src = currentBase64Image;
+            imgPreview.classList.remove("hidden");
+            imgPlaceholder.classList.add("hidden");
+            btnRemoveImg.classList.remove("hidden");
+          };
+          reader.readAsDataURL(file);
+        }
       }
 
-      // Modal Management
+      function removeImage() {
+        currentBase64Image = "";
+        imgPreview.src = "";
+        imgPreview.classList.add("hidden");
+        imgPlaceholder.classList.remove("hidden");
+        btnRemoveImg.classList.add("hidden");
+        document.getElementById("p-image").value = "";
+      }
+
       function addModalItem() {
         modalItems.push({ id: Date.now(), name: "", price: 0 });
         renderModalItems();
@@ -433,38 +517,44 @@
         calculate();
       }
 
+      // UPDATED RENDER FUNCTION FOR ACCESSIBLE MOBILE UI
       function renderModalItems() {
         modalContainer.innerHTML = "";
         modalItems.forEach((item, index) => {
-          const row = document.createElement("div");
-          row.className = "flex items-center space-x-2 animate-in";
-          row.innerHTML = `
-                    <input type="text" placeholder="Bahan ${index + 1}" value="${item.name}" 
-                        oninput="updateItem(${item.id}, 'name', this.value)"
-                        class="flex-[2] px-3 py-2 rounded-lg bg-gray-50 border-none focus:ring-2 focus:ring-indigo-100 text-sm outline-none font-medium">
-                    <div class="flex-[1.5] relative">
-                        <span class="absolute left-2 top-2 text-[10px] text-gray-400 font-bold">Rp</span>
-                        <input type="number" placeholder="Harga" value="${item.price || ""}" 
-                            oninput="updateItem(${item.id}, 'price', this.value)"
-                            class="w-full pl-7 pr-2 py-2 rounded-lg bg-gray-50 border-none focus:ring-2 focus:ring-indigo-100 text-sm outline-none font-bold">
+          const card = document.createElement("div");
+          card.className =
+            "p-4 bg-gray-50/50 rounded-2xl border border-gray-100 animate-in space-y-3";
+          card.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Bahan #${index + 1}</span>
+                        ${
+                          modalItems.length > 1
+                            ? `
+                        <button onclick="removeModalItem(${item.id})" class="text-red-400 hover:text-red-600 transition-colors p-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                        `
+                            : ""
+                        }
                     </div>
-                    ${
-                      modalItems.length > 1
-                        ? `
-                    <button onclick="removeModalItem(${item.id})" class="p-2 text-gray-300 hover:text-red-400 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-                        </svg>
-                    </button>
-                    `
-                        : ""
-                    }
+                    
+                    <input type="text" placeholder="Tulis nama bahan produkta" value="${item.name}" 
+                        oninput="updateItem(${item.id}, 'name', this.value)"
+                        class="w-full px-4 py-3 rounded-xl bg-white border border-gray-100 focus:ring-2 focus:ring-indigo-100 text-sm outline-none font-medium">
+                    
+                    <div class="relative w-full">
+                        <span class="absolute left-4 top-3.5 text-xs text-gray-400 font-bold tracking-widest">Rp</span>
+                        <input type="number" placeholder="Harga Bahan" value="${item.price || ""}" 
+                            oninput="updateItem(${item.id}, 'price', this.value)"
+                            class="w-full pl-12 pr-4 py-3 rounded-xl bg-white border border-gray-100 focus:ring-2 focus:ring-indigo-100 text-sm outline-none font-bold text-indigo-600">
+                    </div>
                 `;
-          modalContainer.appendChild(row);
+          modalContainer.appendChild(card);
         });
       }
 
-      // Calculation Logic
       function formatIDR(amount) {
         return new Intl.NumberFormat("id-ID", {
           style: "currency",
@@ -508,20 +598,20 @@
         const qty = parseFloat(inQty.value) || 0;
         const margin = parseFloat(inMargin.value) || 0;
 
-        totalModalDisplay.innerText = formatIDR(totalModal);
+        if (totalModalDisplay)
+          totalModalDisplay.innerText = formatIDR(totalModal);
 
         const modalPerPcs = qty > 0 ? totalModal / qty : 0;
         const untungPerPcs = modalPerPcs * (margin / 100);
-        // Pembulatan ke 500 terdekat
         const hargaJualPerPcs =
           Math.ceil((modalPerPcs + untungPerPcs) / 500) * 500;
         const totalUntung = (hargaJualPerPcs - modalPerPcs) * qty;
         const totalRevenue = hargaJualPerPcs * qty;
 
-        resModalPcs.innerText = formatIDR(modalPerPcs);
-        resJualPcs.innerText = formatIDR(hargaJualPerPcs);
-        resTotalUntung.innerText = formatIDR(totalUntung);
-        resRevenue.innerText = formatIDR(totalRevenue);
+        if (resModalPcs) resModalPcs.innerText = formatIDR(modalPerPcs);
+        if (resJualPcs) resJualPcs.innerText = formatIDR(hargaJualPerPcs);
+        if (resTotalUntung) resTotalUntung.innerText = formatIDR(totalUntung);
+        if (resRevenue) resRevenue.innerText = formatIDR(totalRevenue);
 
         return {
           totalModal,
@@ -534,19 +624,17 @@
         };
       }
 
-      // Persistence Logic
       function saveCalculation() {
-        if (!inName.value) return showToast("Beri nama produknya dulu yuk!");
-        if (parseFloat(inQty.value) <= 0 || !inQty.value)
-          return showToast("Mau jualan berapa pcs?");
-
+        if (!inName.value || !inQty.value)
+          return showToast("Edd belum pi ko isi nama produkta!");
         const results = calculate();
         if (results.totalModal <= 0)
-          return showToast("Isi harga bahan-bahannya dulu!");
+          return showToast("Edd belum pi ko isi nama bahannya!");
 
         const data = {
           id: currentEditId || Date.now(),
           name: inName.value,
+          image: currentBase64Image,
           items: [...modalItems],
           ...results,
           date: new Date().toLocaleDateString("id-ID", {
@@ -558,18 +646,13 @@
         if (currentEditId) {
           const idx = history.findIndex((h) => h.id === currentEditId);
           history[idx] = data;
-          showToast("Berhasil diperbarui!");
         } else {
           history.unshift(data);
-          showToast("Siap jualan! Tersimpan.");
         }
 
-        localStorage.setItem("cuan_history_v2", JSON.stringify(history));
+        localStorage.setItem("cuan_history_v3", JSON.stringify(history));
         showSuccessModal();
-        setTimeout(() => {
-          closeSuccessModal();
-          showHistoryView();
-        }, 3000);
+        showHistoryView();
       }
 
       function renderHistory() {
@@ -582,34 +665,33 @@
         history.forEach((item) => {
           const el = document.createElement("div");
           el.className =
-            "bg-white rounded-2xl p-5 custom-shadow animate-in border border-transparent hover:border-indigo-100 active:scale-[0.98] transition-all cursor-pointer";
+            "bg-white rounded-2xl p-4 custom-shadow border border-transparent hover:border-indigo-100 transition-all cursor-pointer flex items-center space-x-4";
           el.onclick = () => editItem(item.id);
+
+          const imageTag = item.image
+            ? `<img src="${item.image}" class="w-16 h-16 rounded-xl object-cover shadow-sm">`
+            : `<div class="w-16 h-16 bg-gray-50 rounded-xl flex items-center justify-center text-gray-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                       </div>`;
+
           el.innerHTML = `
-                    <div class="flex justify-between items-start mb-3">
-                        <div>
-                            <span class="text-[10px] font-black text-indigo-400 uppercase tracking-widest">${item.date}</span>
-                            <h3 class="font-bold text-gray-800 text-lg">${item.name}</h3>
-                        </div>
-                        <div class="text-right">
-                            <p class="text-[9px] text-gray-400 uppercase font-bold tracking-wider">Harga Jual</p>
-                            <p class="font-black text-indigo-600 text-lg">${formatIDR(item.hargaJualPerPcs)}</p>
-                        </div>
-                    </div>
-                    <div class="flex justify-between items-center pt-3 border-t border-gray-50">
-                        <div class="flex flex-col">
-                            <span class="text-[10px] text-gray-400 font-bold uppercase">Target</span>
-                            <span class="text-xs text-gray-700 font-bold">${item.qty} Pcs</span>
-                        </div>
-                        <div class="flex items-center space-x-3">
-                            <div class="text-right">
-                                <p class="text-[10px] text-gray-400 font-bold uppercase">Untung Bersih</p>
-                                <p class="text-sm font-black text-green-500">+${formatIDR(item.totalUntung)}</p>
+                    ${imageTag}
+                    <div class="flex-grow">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <span class="text-[9px] font-black text-indigo-400 uppercase tracking-widest">${item.date}</span>
+                                <h3 class="font-bold text-gray-800 text-base leading-tight">${item.name}</h3>
                             </div>
-                            <button onclick="event.stopPropagation(); deleteItem(${item.id})" class="p-2 text-gray-300 hover:text-red-400 transition-colors">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                </svg>
-                            </button>
+                            <p class="font-black text-indigo-600 text-sm">${formatIDR(item.hargaJualPerPcs)}</p>
+                        </div>
+                        <div class="flex justify-between items-center pt-2 mt-2 border-t border-gray-50">
+                            <span class="text-[10px] text-gray-500">${item.qty} Pcs • ${item.margin}% Margin</span>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xs font-black text-green-500">+${formatIDR(item.totalUntung)}</span>
+                                <button onclick="event.stopPropagation(); deleteItem(${item.id})" class="text-gray-300 hover:text-red-400">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -619,20 +701,29 @@
 
       function editItem(id) {
         const item = history.find((h) => h.id === id);
-        if (!item) return;
-
         currentEditId = id;
         inName.value = item.name;
         inQty.value = item.qty;
         inMargin.value = item.margin;
         modalItems = JSON.parse(JSON.stringify(item.items));
 
+        if (item.image) {
+          currentBase64Image = item.image;
+          imgPreview.src = currentBase64Image;
+          imgPreview.classList.remove("hidden");
+          imgPlaceholder.classList.add("hidden");
+          btnRemoveImg.classList.remove("hidden");
+        } else {
+          removeImage();
+        }
+
         formTitle.innerText = "Edit Perhitungan";
         marginVal.innerText = item.margin + "%";
         updateMarginLabel(item.margin);
         renderModalItems();
         calculate();
-        showCalculatorForEdit();
+        calcView.classList.remove("hidden");
+        historyView.classList.add("hidden");
       }
 
       let deleteTargetId = null;
@@ -653,10 +744,10 @@
 
       document.getElementById("confirm-delete").onclick = () => {
         history = history.filter((h) => h.id !== deleteTargetId);
-        localStorage.setItem("cuan_history_v2", JSON.stringify(history));
+        localStorage.setItem("cuan_history_v3", JSON.stringify(history));
         renderHistory();
         closeDeleteModal();
-        showToast("Catatan berhasil dihapus");
+        showToast("Terhapusmi!");
       };
 
       function resetForm() {
@@ -666,6 +757,7 @@
         inMargin.value = 35;
         marginVal.innerText = "35%";
         modalItems = [{ id: Date.now(), name: "", price: 0 }];
+        removeImage();
         formTitle.innerText = "Rencana Jualan";
         updateMarginLabel(35);
         renderModalItems();
@@ -677,16 +769,26 @@
         toast.innerText = msg;
         toast.classList.add("opacity-100");
         toast.style.bottom = "40px";
+
         setTimeout(() => {
           toast.classList.remove("opacity-100");
           toast.style.bottom = "30px";
-        }, 2500);
+        }, 2000);
       }
+
+      // ===============================
+      // SUCCESS MODAL FUNCTION (DI LUAR showToast)
+      // ===============================
 
       function showSuccessModal() {
         const modal = document.getElementById("success-modal");
         modal.classList.remove("opacity-0", "pointer-events-none");
         modal.querySelector("div").classList.remove("scale-90");
+
+        // Auto close setelah 2 detik
+        setTimeout(() => {
+          closeSuccessModal();
+        }, 2000);
       }
 
       function closeSuccessModal() {
